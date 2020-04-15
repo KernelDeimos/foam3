@@ -35,6 +35,7 @@ foam.CLASS({
     'java.io.ByteArrayOutputStream',
     'java.io.PrintStream',
     'java.util.Date',
+    'java.util.Map',
     'static foam.mlang.MLang.*',
   ],
 
@@ -230,6 +231,11 @@ foam.CLASS({
       args: [
         {
           name: 'x', type: 'Context'
+        },
+        {
+          name: 'args',
+          type: 'Map',
+          javaType: 'java.util.Map<String,String>'
         }
       ],
       javaCode: `

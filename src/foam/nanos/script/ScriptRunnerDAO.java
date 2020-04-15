@@ -57,7 +57,7 @@ public class ScriptRunnerDAO
           try {
             script.setStatus(ScriptStatus.RUNNING);
             getDelegate().put_(x, script);
-            script.runScript(x);
+            script.runScript(x, null);
             script.setStatus(ScriptStatus.UNSCHEDULED);
           } catch(Throwable t) {
             script.setStatus(ScriptStatus.ERROR);

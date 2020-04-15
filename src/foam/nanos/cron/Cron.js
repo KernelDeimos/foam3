@@ -76,6 +76,11 @@ foam.CLASS({
         {
           name: 'x',
           type: 'Context'
+        },
+        {
+          name: 'args',
+          type: 'Map',
+          javaType: 'java.util.Map<String, String>'
         }
       ],
       type: 'Void',
@@ -91,7 +96,7 @@ Notification cronStartNotify = new Notification();
 cronStartNotify.setBody("Cron STARTED - " + this.getId() + " " + this.getDescription());
 notification.put(cronStartNotify);
 */
-super.runScript(x);
+super.runScript(x, null);
 
 /*
 Notification cronEndNotify = new Notification();

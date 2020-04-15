@@ -188,6 +188,16 @@ p({
 
 p({
   "class":"foam.nanos.boot.NSpec",
+  "name":"scriptProgressDAO",
+  "serve":true,
+  "serviceScript":"""
+    return new foam.dao.MDAO(foam.nanos.script.Script.getOwnClassInfo());
+  """,
+  "client":"{\"of\":\"foam.nanos.script.ScriptProgress\"}"
+})
+
+p({
+  "class":"foam.nanos.boot.NSpec",
   "name":"cronDAO",
   "serve":true,
   "serviceScript":"""

@@ -1,9 +1,9 @@
 foam.CLASS({
   package: 'foam.nanos.osutil',
-  name: 'ShellScriptState',
+  name: 'ShellScriptProgress',
+  extends: 'foam.nanos.script.ScriptProgress',
 
   properties: [
-    { name: 'id', class: 'String' },
     { name: 'lineNo', class: 'Int' }
   ]
 });
@@ -26,7 +26,6 @@ foam.CLASS({
 
   properties: [
     { name: 'name', class: 'String' },
-    { name: 'uuid', class: 'String' },
     { name: 'path', class: 'String' }
   ],
 
@@ -35,18 +34,18 @@ foam.CLASS({
       name: 'run',
       args: [
         { name: 'x', type: 'X' },
-        { name: 'uuid', type: 'String' },
-        { name: 'code', type: 'String' },
         {
-          name: 'state',
-          type: 'DAO'
-        }
+          name: 'ins',
+          type: 'foam.nanos.osutil.ShellScriptProgress',
+          javaType: 'ShellScriptProgress'
+        },
+        { name: 'code', type: 'String' },
       ],
       javaThrows: ['IOException'],
       javaCode: `
-        String prefix = "foam.nanos.osutil:"+uuid+":";
+        String prefix = "foam.nanos.osutil:"+ins.getId()+":";
         ProcessBuilder pb = new ProcessBuilder(
-          getPath());
+          getPath(), "-x");
         Map<String,String> env = pb.environment();
         env.put("PS4", prefix+"\${LINENO};");
         Process p = pb.start();
@@ -57,6 +56,8 @@ foam.CLASS({
         ou.write(code + "\\n");
         ou.flush();
 
+        ((DAO) x.get("scriptProgressDAO")).put(ins);
+
         try {
           while ( true ) {
             String line = in.readLine();
@@ -64,15 +65,15 @@ foam.CLASS({
               int lineNo = Integer.parseInt(
                 line.substring(prefix.length(), line.indexOf(";"))
               );
-              state.put(new ShellScriptState.Builder(x)
-                .setId(uuid)
-                .setLineNo(lineNo)
-                .build());
+              ins.setLineNo(lineNo);
+              ((DAO) x.get("scriptProgressDAO")).put(ins);
             }
           }
         } catch ( EOFException e ) {
           // expected
         }
+
+        ((DAO) x.get("scriptProgressDAO")).remove(ins);
       `
     }
   ]
@@ -84,21 +85,103 @@ UUID.randomUUID().toString()
 
 foam.CLASS({
   package: 'foam.nanos.osutil',
-  name: 'ShellExecutor',
+  name: 'ShellScript',
+  extends: 'foam.nanos.script.Script',
 
   properties: [
     {
-      name: 'shells',
-      class: 'FObjectArray',
+      name: 'shell',
+      class: 'FObjectProperty',
+      of: 'foam.nanos.osutil.Shell'
+    },
+  ],
+
+  javaImports: [
+    'foam.dao.DAO',
+    'java.io.IOException',
+    'java.util.UUID'
+  ],
+
+  methods: [
+    {
+      name: 'runScript',
+      args: [
+        {
+          name: 'x', type: 'Context',
+        },
+        {
+          name: 'args',
+          type: 'Map',
+          javaType: 'java.util.Map<String,String>'
+        }
+      ],
+      javaCode: `
+        System.out.println("runScript WAS CALLED");
+        System.out.println(getCode());
+        String instanceId = UUID.randomUUID().toString();
+        ShellScriptProgress ins = new ShellScriptProgress.Builder(x)
+          .setId(instanceId)
+          // .setScript(getId())
+          .setLineNo(0)
+          .build();
+        
+        ((DAO) x.get("scriptProgressDAO")).put(ins);
+
+        try {
+          getShell().run(x, ins, getCode());
+        } catch ( IOException e ) {
+          throw new RuntimeException(
+            "Failed to run script "+getId()+": "+e.getMessage());
+        }
+      `
+    }
+  ]
+});
+
+foam.CLASS({
+  package: 'foam.nanos.osutil',
+  name: 'FileBashScript',
+  extends: 'foam.nanos.osutil.ShellScript',
+
+  javaImports: [
+    'foam.nanos.script.ScriptProgress',
+    'java.io.File',
+    'java.io.IOException',
+    'org.apache.commons.io.FileUtils',
+  ],
+
+  properties: [
+    {
+      name: 'shell',
+      class: 'FObjectProperty',
       of: 'foam.nanos.osutil.Shell',
       javaFactory: `
-        return new Shell[] {
-          new Shell.Builder(getX())
-            .setName("bash")
-            .setPath("/bin/bash")
-            .build()
-        };
+        return new Shell.Builder(getX())
+          .setName("bash")
+          .setPath("/bin/bash")
+          .build();
       `
+    },
+    {
+      name: 'code',
+      class: 'Code',
+      javaGetter: `
+        try {
+          String src =
+            FileUtils.readFileToString(new File(getFilepath()));
+          System.out.println("SCRIPT");
+          System.out.println(src);
+          return src;
+        } catch ( IOException e ) {
+          throw new RuntimeException(
+            "Could not open file for script: " + getFilepath()
+          );
+        }
+      `
+    },
+    {
+      name: 'filepath',
+      class: 'String'
     }
   ]
 });
