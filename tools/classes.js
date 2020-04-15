@@ -400,6 +400,13 @@ var classes = [
   'foam.nanos.geocode.GoogleMapsPlacesResponse',
   'foam.nanos.geocode.GoogleMapsCredentials',
 
+  // Shell Scripts
+  'foam.nanos.script.ScriptProgress',
+  'foam.nanos.osutil.ShellScriptProgress',
+  'foam.nanos.osutil.Shell',
+  'foam.nanos.osutil.ShellScript',
+  'foam.nanos.osutil.FileBashScript',
+
   'foam.nanos.demo.DemoObject',
   'foam.nanos.demo.relationship.Student',
   'foam.nanos.demo.relationship.Professor',

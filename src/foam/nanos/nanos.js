@@ -130,6 +130,7 @@ FOAM_FILES([
   { name: "foam/nanos/u2/navigation/NotificationMenuItem", flags: ['web'] },
   { name: "foam/nanos/script/Language" },
   { name: "foam/nanos/script/ScriptStatus" },
+  { name: "foam/nanos/script/ScriptProgress" },
   { name: "foam/nanos/script/Script" },
   { name: "foam/nanos/script/TestRunnerConfig" },
   { name: "foam/nanos/script/TestRunnerScript" },
@@ -304,5 +305,7 @@ FOAM_FILES([
   //authservice
   { name: "foam/nanos/auth/CapabilityAuthService" },
   // google
-  { name: "foam/nanos/geocode/GoogleMapsCredentials" }
+  { name: "foam/nanos/geocode/GoogleMapsCredentials" },
+  // osutil
+  { name: 'foam/nanos/osutil/ShellExecutor'}
 ]);

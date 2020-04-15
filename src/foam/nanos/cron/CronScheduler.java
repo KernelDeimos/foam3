@@ -69,7 +69,7 @@ public class CronScheduler
 
             PM pm = new PM(CronScheduler.class, "cron:" + cron.getId());
             try {
-              cron.runScript(CronScheduler.this.getX());
+              cron.runScript(CronScheduler.this.getX(), null);
             } catch (Throwable t) {
               logger.error(this.getClass(), "Error running Cron Job", cron.getId(), t.getMessage(), t);
             } finally {

@@ -68,6 +68,11 @@ foam.CLASS({
       args: [
         {
           name: 'x', type: 'Context'
+        },
+        {
+          name: 'args',
+          type: 'Map',
+          javaType: 'java.util.Map<String, String>'
         }
       ],
       javaCode: `
@@ -167,7 +172,7 @@ foam.CLASS({
       javaCode: `
         printBold(test.getId());
         try {
-          test.runScript(x);
+          test.runScript(x, null);
           setPassedTests(getPassedTests() + (int) test.getPassed());
           setFailedTests(getFailedTests() + (int) test.getFailed());
           if ( (int) test.getFailed() > 0) {
