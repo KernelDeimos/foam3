@@ -1,15 +1,5 @@
 foam.CLASS({
   package: 'foam.nanos.osutil',
-  name: 'ShellScriptProgress',
-  extends: 'foam.nanos.script.ScriptProgress',
-
-  properties: [
-    { name: 'lineNo', class: 'Int' }
-  ]
-});
-
-foam.CLASS({
-  package: 'foam.nanos.osutil',
   name: 'Shell',
 
   javaImports: [
@@ -36,8 +26,8 @@ foam.CLASS({
         { name: 'x', type: 'X' },
         {
           name: 'ins',
-          type: 'foam.nanos.osutil.ShellScriptProgress',
-          javaType: 'ShellScriptProgress'
+          type: 'foam.nanos.script.ShellScriptProgress',
+          javaType: 'foam.nanos.script.ShellScriptProgress'
         },
         { name: 'code', type: 'String' },
       ],
@@ -86,63 +76,63 @@ foam.CLASS({
 UUID.randomUUID().toString()
 */
 
-foam.CLASS({
-  package: 'foam.nanos.osutil',
-  name: 'ShellScript',
-  extends: 'foam.nanos.script.Script',
+// foam.CLASS({
+//   package: 'foam.nanos.osutil',
+//   name: 'ShellScript',
+//   extends: 'foam.nanos.script.Script',
 
-  properties: [
-    {
-      name: 'shell',
-      class: 'FObjectProperty',
-      of: 'foam.nanos.osutil.Shell'
-    },
-  ],
+//   properties: [
+//     {
+//       name: 'shell',
+//       class: 'FObjectProperty',
+//       of: 'foam.nanos.osutil.Shell'
+//     },
+//   ],
 
-  javaImports: [
-    'foam.dao.DAO',
-    'java.io.IOException',
-    'java.util.UUID'
-  ],
+//   javaImports: [
+//     'foam.dao.DAO',
+//     'java.io.IOException',
+//     'java.util.UUID'
+//   ],
 
-  methods: [
-    {
-      name: 'runScript',
-      args: [
-        {
-          name: 'x', type: 'Context',
-        },
-        {
-          name: 'args',
-          type: 'Map',
-          javaType: 'java.util.Map<String,String>'
-        }
-      ],
-      javaCode: `
-        String instanceId = UUID.randomUUID().toString();
-        ShellScriptProgress ins = new ShellScriptProgress.Builder(x)
-          .setId(instanceId)
-          .setScript(getId())
-          .setLineNo(0)
-          .build();
+//   methods: [
+//     {
+//       name: 'runScript',
+//       args: [
+//         {
+//           name: 'x', type: 'Context',
+//         },
+//         {
+//           name: 'args',
+//           type: 'Map',
+//           javaType: 'java.util.Map<String,String>'
+//         }
+//       ],
+//       javaCode: `
+//         String instanceId = UUID.randomUUID().toString();
+//         ShellScriptProgress ins = new ShellScriptProgress.Builder(x)
+//           .setId(instanceId)
+//           .setScript(getId())
+//           .setLineNo(0)
+//           .build();
         
-        ((DAO) x.get("scriptProgressDAO")).put(ins);
+//         ((DAO) x.get("scriptProgressDAO")).put(ins);
 
-        try {
-          getShell().run(x, ins, getCode());
-        } catch ( IOException e ) {
-          throw new RuntimeException(
-            "Failed to run script "+getId()+": "+e.getMessage());
-        }
-      `
-    }
-  ]
-});
+//         try {
+//           getShell().run(x, ins, getCode());
+//         } catch ( IOException e ) {
+//           throw new RuntimeException(
+//             "Failed to run script "+getId()+": "+e.getMessage());
+//         }
+//       `
+//     }
+//   ]
+// });
 
 foam.CLASS({
   package: 'foam.nanos.osutil',
   name: 'FileBashScript',
-  extends: 'foam.nanos.osutil.ShellScript',
+  extends: 'foam.nanos.script.FileScript',
 
   javaImports: [
     'foam.nanos.script.ScriptProgress',
@@ -163,24 +153,5 @@ foam.CLASS({
           .build();
       `
     },
-    {
-      name: 'code',
-      class: 'Code',
-      javaGetter: `
-        try {
-          String src =
-            FileUtils.readFileToString(new File(getFilepath()));
-          return src;
-        } catch ( IOException e ) {
-          throw new RuntimeException(
-            "Could not open file for script: " + getFilepath()
-          );
-        }
-      `
-    },
-    {
-      name: 'filepath',
-      class: 'String'
-    }
   ]
 });

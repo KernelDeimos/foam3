@@ -402,9 +402,11 @@ var classes = [
 
   // Shell Scripts
   'foam.nanos.script.ScriptProgress',
-  'foam.nanos.osutil.ShellScriptProgress',
+  'foam.nanos.script.ShellScriptProgress',
+  'foam.nanos.script.ShellScript',
+  'foam.nanos.script.FileScript',
+  'foam.nanos.script.FileScriptDAO',
   'foam.nanos.osutil.Shell',
-  'foam.nanos.osutil.ShellScript',
   'foam.nanos.osutil.FileBashScript',
 
   'foam.nanos.demo.DemoObject',

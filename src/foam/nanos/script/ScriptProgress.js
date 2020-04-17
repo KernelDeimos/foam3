@@ -8,6 +8,16 @@ foam.CLASS({
   ]
 });
 
+foam.CLASS({
+  package: 'foam.nanos.script',
+  name: 'ShellScriptProgress',
+  extends: 'foam.nanos.script.ScriptProgress',
+
+  properties: [
+    { name: 'lineNo', class: 'Int' }
+  ]
+});
+
 // foam.RELATIONSHIP({
 //   sourceModel: 'foam.nanos.script.Script',
 //   targetModel: 'foam.nanos.script.ScriptProgress',
