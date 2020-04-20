@@ -14,6 +14,7 @@ foam.CLASS({
       name: 'code',
       class: 'Code',
       javaGetter: `
+        System.out.println("Getter called");
         try {
           String src =
             FileUtils.readFileToString(new File(getFilepath()));

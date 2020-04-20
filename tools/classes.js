@@ -405,6 +405,7 @@ var classes = [
   'foam.nanos.script.ShellScriptProgress',
   'foam.nanos.script.ShellScript',
   'foam.nanos.script.FileScript',
+  'foam.nanos.script.FileScriptSink',
   'foam.nanos.script.FileScriptDAO',
   'foam.nanos.osutil.Shell',
   'foam.nanos.osutil.PS4Shell',
