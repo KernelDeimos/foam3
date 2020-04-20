@@ -407,7 +407,9 @@ var classes = [
   'foam.nanos.script.FileScript',
   'foam.nanos.script.FileScriptDAO',
   'foam.nanos.osutil.Shell',
+  'foam.nanos.osutil.PS4Shell',
   'foam.nanos.osutil.FileBashScript',
+  'foam.nanos.osutil.FileNodeScript',
 
   'foam.nanos.demo.DemoObject',
   'foam.nanos.demo.relationship.Student',
