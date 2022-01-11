@@ -180,6 +180,7 @@ FOAM_FILES([
   { name: "foam/nanos/menu/Menu" },
   { name: "foam/nanos/menu/MenuBar" },
   { name: "foam/nanos/menu/PopupMenu" },
+  { name: "foam/nanos/menu/SequenceMenu" },
   { name: "foam/nanos/menu/SubMenu" },
   { name: "foam/nanos/menu/SubMenuView" },
   { name: "foam/nanos/menu/TabsMenu" },
